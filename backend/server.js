@@ -235,7 +235,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Messenger API running', version: '1.0.0' });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Messenger server running on port ${PORT}`);
   console.log(`📱 Frontend URL: ${FRONTEND_URL}`);
 });
