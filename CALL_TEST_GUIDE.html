@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call Test Guide</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .step h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .screenshot {
+            border: 2px solid #ddd;
+            padding: 20px;
+            background: #fafafa;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .important {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .check {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .cross {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>📹 Video Call Test Guide</h1>
+    
+    <div class="important">
+        <h3>⚠️ MOST COMMON MISTAKE:</h3>
+        <p><strong>You MUST click on the user's name in the sidebar BEFORE clicking the call button!</strong></p>
+        <p>The call buttons won't work if no chat is selected.</p>
+    </div>
+
+    <div class="step">
+        <h2>Step 1: Setup Two Browser Windows</h2>
+        <div class="screenshot">
+            <p><strong>Window 1 (Regular Chrome):</strong></p>
+            <ul>
+                <li>Go to: <code>http://localhost:3000</code></li>
+                <li>Login as: <code>alice</code> / <code>test123</code></li>
+            </ul>
+            
+            <p><strong>Window 2 (Incognito - Press Cmd+Shift+N):</strong></p>
+            <ul>
+                <li>Go to: <code>http://localhost:3000</code></li>
+                <li>Login as: <code>bob</code> / <code>test123</code></li>
+            </ul>
+        </div>
+        <p class="check">✅ Both users should now be logged in</p>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Select the User in Sidebar (IMPORTANT!)</h2>
+        <div class="screenshot">
+            <p><strong>In Window 1 (Alice):</strong></p>
+            <ol>
+                <li>Look at the LEFT sidebar</li>
+                <li>You should see "Bob Jones" with a gray dot (offline) or green dot (online)</li>
+                <li><strong>CLICK on "Bob Jones"</strong></li>
+                <li>The name should HIGHLIGHT in blue/purple</li>
+                <li>The right side should show the chat area with:
+                    <ul>
+                        <li>"Bob Jones" at the top</li>
+                        <li>Two buttons: 📞 and 📹</li>
+                        <li>Message input box at bottom</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <p class="check">✅ User selected = Chat area visible on right</p>
+        <p class="cross">❌ No user selected = Just empty screen or "Select a chat to start messaging"</p>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Start the Video Call</h2>
+        <div class="screenshot">
+            <p><strong>In Window 1 (Alice's window):</strong></p>
+            <ol>
+                <li>Make sure Bob is selected (highlighted in sidebar)</li>
+                <li>Click the 📹 button (top right of chat area)</li>
+                <li>Chrome will ask: "localhost wants to use your Camera and Microphone"</li>
+                <li>Click <strong>"Allow"</strong></li>
+                <li>You should see:
+                    <ul>
+                        <li>Black overlay covering the screen</li>
+                        <li>Text: "Call with Bob Jones"</li>
+                        <li>Your own video (small box, bottom right corner)</li>
+                        <li>"End Call" button</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <p class="check">✅ You should see your own face in the small video box</p>
+    </div>
+
+    <div class="step">
+        <h2>Step 4: Answer the Call</h2>
+        <div class="screenshot">
+            <p><strong>In Window 2 (Bob's incognito window):</strong></p>
+            <ol>
+                <li>You should see a popup overlay:
+                    <ul>
+                        <li>"📞 Incoming video call"</li>
+                        <li>"alice"</li>
+                        <li>"Answer" button (green)</li>
+                        <li>"Reject" button (red)</li>
+                    </ul>
+                </li>
+                <li>Click <strong>"Answer"</strong></li>
+                <li>Chrome will ask: "localhost wants to use your Camera and Microphone"</li>
+                <li>Click <strong>"Allow"</strong></li>
+                <li>You should now see:
+                    <ul>
+                        <li>Alice's video (large, main area)</li>
+                        <li>Your own video (small box, bottom right)</li>
+                        <li>"End Call" button</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <p class="check">✅ Both windows should now show live video!</p>
+    </div>
+
+    <div class="step">
+        <h2>🐛 If Nothing Happens When You Click 📹:</h2>
+        <div class="screenshot">
+            <h3>Checklist:</h3>
+            <ol>
+                <li><strong>Did you select a user?</strong>
+                    <br>→ Click on "Bob Jones" in the LEFT sidebar first
+                </li>
+                <li><strong>Is the chat area visible?</strong>
+                    <br>→ You should see the chat interface on the right
+                </li>
+                <li><strong>Are the buttons visible?</strong>
+                    <br>→ 📞 and 📹 buttons should be at top right
+                </li>
+                <li><strong>Check the browser console:</strong>
+                    <br>→ Press F12
+                    <br>→ Click "Console" tab
+                    <br>→ Click the 📹 button again
+                    <br>→ Look for emoji logs like "🎥 Starting call..."
+                    <br>→ Or look for RED error messages
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>🔍 Debug Mode (Console Check)</h2>
+        <div class="screenshot">
+            <p><strong>Open Console (F12) and try the call:</strong></p>
+            <p>You should see these logs if it's working:</p>
+            <ul>
+                <li>🎥 Starting call: video to user: Bob Jones</li>
+                <li>🎤 Requesting media access...</li>
+                <li>✅ Got local stream: ['audio', 'video']</li>
+                <li>✅ Set local video element</li>
+                <li>➕ Added track: audio</li>
+                <li>➕ Added track: video</li>
+                <li>📤 Sending call offer to: 2</li>
+                <li>✅ Call initiated!</li>
+            </ul>
+            
+            <p><strong>In Bob's window you should see:</strong></p>
+            <ul>
+                <li>📞 Incoming call from: alice type: video</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="important">
+        <h3>⚠️ Common Issues:</h3>
+        <ul>
+            <li><strong>"NotAllowedError"</strong> → You blocked camera/microphone permissions
+                <br>Fix: Click 🔒 icon in address bar → Set Camera/Mic to "Allow" → Refresh
+            </li>
+            <li><strong>"NotFoundError"</strong> → No camera detected
+                <br>Fix: Check if your Mac has a camera, try restarting Chrome
+            </li>
+            <li><strong>"NotReadableError"</strong> → Camera in use by another app
+                <br>Fix: Close Zoom, FaceTime, Skype, etc. and try again
+            </li>
+            <li><strong>No logs at all</strong> → Button click not working
+                <br>Fix: Make sure you clicked on user in sidebar first!
+            </li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h2>✅ Success Looks Like:</h2>
+        <div class="screenshot">
+            <ul>
+                <li>Alice sees: Her own video (small) + waiting for Bob</li>
+                <li>Bob sees: Incoming call popup</li>
+                <li>Bob clicks Answer</li>
+                <li>Both see: Each other's video live!</li>
+                <li>Both can click "End Call" to disconnect</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr style="margin: 40px 0;">
+    
+    <p style="text-align: center; color: #666;">
+        Still having issues? Check the console (F12) for error messages and report them back.
+    </p>
+</body>
+</html>
