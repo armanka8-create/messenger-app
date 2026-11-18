@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: messenger-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://messenger-app-lime-three.vercel.app
+    healthCheckPath: /health
+
+databases:
+  - name: messenger-db
+    databaseName: messenger
+    user: messenger
+    region: oregon
+    plan: free
