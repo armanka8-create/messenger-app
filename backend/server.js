@@ -12,6 +12,9 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
+console.log(`🔧 PORT from environment: ${process.env.PORT || 'not set, using 3001'}`);
+console.log(`🔧 FRONTEND_URL: ${FRONTEND_URL}`);
+
 // Middleware
 app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json());
@@ -233,6 +236,11 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => {
   res.json({ message: 'Messenger API running', version: '1.0.0' });
+});
+
+// Health check endpoint for Railway
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: Date.now() });
 });
 
 // Start server only after database is ready
