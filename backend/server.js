@@ -16,6 +16,13 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json());
 
+// Initialize database before starting server
+(async () => {
+  console.log('🔄 Initializing database...');
+  await Database.initDatabase();
+  console.log('✅ Database ready!');
+})();
+
 // Socket.IO setup
 const io = new Server(server, {
   cors: {

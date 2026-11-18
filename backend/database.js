@@ -37,13 +37,15 @@ async function initDatabase() {
       CREATE INDEX IF NOT EXISTS idx_messages_from_user ON messages(from_user_id);
     `);
     console.log('✅ Database initialized');
+    return true;
   } catch (err) {
     console.error('❌ Database initialization error:', err);
+    return false;
   }
 }
 
-// Initialize on startup
-initDatabase();
+// Export init function so server can await it
+module.exports.initDatabase = initDatabase;
 
 class Database {
   // User operations
