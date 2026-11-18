@@ -124,4 +124,8 @@ class Database {
   }
 }
 
-module.exports = new Database();
+const db = new Database();
+
+// Export both the database instance and init function
+module.exports = db;
+module.exports.initDatabase = initDatabase;
