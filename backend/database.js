@@ -2,7 +2,8 @@ const SQLite = require('better-sqlite3');
 const path = require('path');
 const bcrypt = require('bcrypt');
 
-const db = new SQLite(path.join(__dirname, 'messenger.db'));
+// Use in-memory database for Railway (read-only filesystem)
+const db = new SQLite(':memory:');
 
 // Initialize database schema
 db.exec(`
