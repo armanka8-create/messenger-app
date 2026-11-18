@@ -33,6 +33,7 @@ function Chat({ user, onLogout }) {
         peerConnectionRef.current.close();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ function Chat({ user, onLogout }) {
       loadMessages(selectedUser.id);
       socket.emit('mark-read', { fromUserId: selectedUser.id });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedUser]);
 
   useEffect(() => {
@@ -94,14 +96,17 @@ function Chat({ user, onLogout }) {
 
     // WebRTC call signaling
     socket.on('incoming-call', async ({ fromUserId, fromUsername, offer, callType }) => {
+      console.log('📞 Incoming call from:', fromUsername, 'type:', callType);
       setIncomingCall({ fromUserId, fromUsername, offer, callType });
     });
 
     socket.on('call-answered', async ({ answer }) => {
+      console.log('📞 Call answered, setting remote description');
       await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer));
     });
 
     socket.on('ice-candidate', async ({ candidate }) => {
+      console.log('🧊 Received ICE candidate');
       if (peerConnectionRef.current) {
         await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate));
       }
@@ -174,9 +179,23 @@ function Chat({ user, onLogout }) {
     };
 
     pc.ontrack = (event) => {
+      console.log('🎬 Received remote track:', event.track.kind);
+      console.log('🎬 Track enabled:', event.track.enabled, 'muted:', event.track.muted, 'readyState:', event.track.readyState);
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = event.streams[0];
         remoteStreamRef.current = event.streams[0];
+        console.log('✅ Set remote video element with stream:', event.streams[0].getTracks().map(t => t.kind));
+        
+        // Force play audio
+        setTimeout(() => {
+          if (remoteVideoRef.current) {
+            remoteVideoRef.current.play().then(() => {
+              console.log('✅ Remote video/audio playing');
+            }).catch(err => {
+              console.error('❌ Failed to play remote stream:', err);
+            });
+          }
+        }, 100);
       }
     };
 
@@ -187,25 +206,35 @@ function Chat({ user, onLogout }) {
     if (!selectedUser) return;
 
     try {
+      console.log('🎥 Starting call:', callType, 'to user:', selectedUser.display_name);
       const constraints = {
         audio: true,
         video: callType === 'video'
       };
 
+      console.log('🎤 Requesting media access...');
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('✅ Got local stream:', stream.getTracks().map(t => t.kind));
       localStreamRef.current = stream;
       
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
+        console.log('✅ Set local video element');
+        // Force local video to play
+        localVideoRef.current.play().catch(err => {
+          console.error('❌ Failed to play local video:', err);
+        });
       }
 
       peerConnectionRef.current = createPeerConnection();
       stream.getTracks().forEach(track => {
         peerConnectionRef.current.addTrack(track, stream);
+        console.log('➕ Added track:', track.kind);
       });
 
       const offer = await peerConnectionRef.current.createOffer();
       await peerConnectionRef.current.setLocalDescription(offer);
+      console.log('📤 Sending call offer to:', selectedUser.id);
 
       socket.emit('call-user', {
         toUserId: selectedUser.id,
@@ -214,9 +243,10 @@ function Chat({ user, onLogout }) {
       });
 
       setIsInCall(true);
+      console.log('✅ Call initiated!');
     } catch (err) {
-      console.error('Failed to start call:', err);
-      alert('Could not access camera/microphone');
+      console.error('❌ Failed to start call:', err);
+      alert('Could not access camera/microphone: ' + err.message);
     }
   };
 
@@ -224,16 +254,24 @@ function Chat({ user, onLogout }) {
     if (!incomingCall) return;
 
     try {
+      console.log('📞 Answering call from:', incomingCall.fromUsername);
       const constraints = {
         audio: true,
         video: incomingCall.callType === 'video'
       };
 
+      console.log('🎤 Requesting media access...');
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('✅ Got local stream:', stream.getTracks().map(t => t.kind));
       localStreamRef.current = stream;
       
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
+        console.log('✅ Set local video element');
+        // Force local video to play
+        localVideoRef.current.play().catch(err => {
+          console.error('❌ Failed to play local video:', err);
+        });
       }
 
       peerConnectionRef.current = createPeerConnection();

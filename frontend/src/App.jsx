@@ -6,7 +6,6 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
 
   useEffect(() => {
     // Check for existing session
@@ -17,7 +16,6 @@ function App() {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
-        setToken(storedToken);
         connectSocket(storedToken);
       } catch (err) {
         localStorage.clear();
@@ -27,7 +25,6 @@ function App() {
 
   const handleLogin = (userData, authToken) => {
     setUser(userData);
-    setToken(authToken);
     connectSocket(authToken);
   };
 
