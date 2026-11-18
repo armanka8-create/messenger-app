@@ -16,13 +16,6 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json());
 
-// Initialize database before starting server
-(async () => {
-  console.log('🔄 Initializing database...');
-  await Database.initDatabase();
-  console.log('✅ Database ready!');
-})();
-
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
@@ -242,7 +235,14 @@ app.get('/', (req, res) => {
   res.json({ message: 'Messenger API running', version: '1.0.0' });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Messenger server running on port ${PORT}`);
-  console.log(`📱 Frontend URL: ${FRONTEND_URL}`);
-});
+// Start server only after database is ready
+(async () => {
+  console.log('🔄 Initializing database...');
+  await Database.initDatabase();
+  console.log('✅ Database ready!');
+  
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Messenger server running on port ${PORT}`);
+    console.log(`📱 Frontend URL: ${FRONTEND_URL}`);
+  });
+})();
