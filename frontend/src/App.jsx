@@ -32,7 +32,6 @@ function App() {
     disconnectSocket();
     localStorage.clear();
     setUser(null);
-    setToken(null);
   };
 
   return (
